@@ -55,3 +55,11 @@ export async function refresh(token: string): Promise<User> {
   saveToken(res.headers["authorization"]?.replace("Bearer ", "") || "");
   return user;
 }
+
+if (typeof window !== "undefined") {
+  (window as any).Auth = {
+    login,
+    logout,
+    refresh,
+  };
+}
