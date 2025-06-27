@@ -30,7 +30,7 @@ export async function register({
     if (err.response && err.response.data?.message) {
       throw new Error(err.response.data.message);
     }
-    throw new Error("Signup has failed. Please try again.");
+    throw new Error("Signup failed. Please try again.");
   }
 }
 
