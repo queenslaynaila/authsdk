@@ -30,7 +30,7 @@ export async function register({
   campaign,
 }: RegisterPayload): Promise<User> {
   try {
-    const res = await api.post("/auth/register", {
+    const res = await api.post("/register", {
       phone,
       password,
       username,
@@ -59,7 +59,7 @@ export async function login({
   password,
 }: LoginPayLoad): Promise<User> {
   try {
-    const res = await api.post("/auth/login", { phone, password });
+    const res = await api.post("/login", { phone, password });
     const user: User = res.data;
     return user;
   } catch (err: any) {
@@ -71,11 +71,11 @@ export async function login({
 }
 
 export async function logout(): Promise<void> {
-  await api.post("/auth/logout");
+  await api.post("/logout");
 }
 
 export async function refresh(token: string): Promise<User> {
-  const res = await api.post("/auth/refresh", { token });
+  const res = await api.post("/refresh", { token });
   const user: User = res.data;
   return user;
 }
