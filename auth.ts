@@ -1,13 +1,8 @@
 import api from "./axios.config";
 
-type RegisterPayload = {
+type Payload = {
   phone: string;
   password: string;
-  username: string;
-  promo_code?: string;
-  reference?: string;
-  referer?: string;
-  campaign?: string;
 };
 
 type User = {
@@ -23,21 +18,11 @@ type User = {
 export async function register({
   phone,
   password,
-  username,
-  promo_code,
-  reference,
-  referer,
-  campaign,
-}: RegisterPayload): Promise<User> {
+}: Payload): Promise<User> {
   try {
     const res = await api.post("/register", {
       phone,
-      password,
-      username,
-      promo_code,
-      reference,
-      referer,
-      campaign,
+      password
     });
     const user: User = res.data;
     return user;
@@ -49,15 +34,11 @@ export async function register({
   }
 }
 
-type LoginPayLoad = {
-  phone: string;
-  password: string;
-};
 
 export async function login({
   phone,
   password,
-}: LoginPayLoad): Promise<User> {
+}: Payload): Promise<User> {
   try {
     const res = await api.post("/login", { phone, password });
     const user: User = res.data;
