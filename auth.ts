@@ -82,8 +82,8 @@ export async function refresh(token: string): Promise<User> {
 
 if (typeof window !== "undefined") {
   (window as any).Auth = {
-    register,
     login,
+    register,
     logout,
     refresh,
   };
