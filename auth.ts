@@ -59,7 +59,7 @@ export async function login({
   }
 }
 
-export async function refresh(token: { token: string }): Promise<User> {
+export async function refresh(token:string): Promise<User> {
   try {
     const { data: user } = await api.post<User>("/refresh", {
       token
@@ -97,3 +97,5 @@ if (typeof window !== "undefined") {
     refresh,
   };
 }
+
+export {};
