@@ -15,53 +15,78 @@ type User = {
   created_at: string;
 };
 
-export async function register({
+function handleApiError(err: any): never {
+  if (err.response?.data?.message) {
+    if (err.response.data.errors?.path) {
+      throw new Error(
+        `${err.response.data.message}:
+        ${err.response.data.errors.path} 
+        ${err.response.data.errors.message}`
+      );
+    }
+    throw new Error(err.response.data.message);
+  }
+  throw new Error("Sth went wrong. Please try again.");
+}
+
+async function register({
   phone,
   password,
 }: Payload): Promise<User> {
   try {
-    const res = await api.post("/register", {
+    const { data: user } = await api.post<User>("/register", {
+      phone,
+      password,
+    });
+    return user;
+  } catch (err: any) {
+    handleApiError(err);
+  }
+}
+
+async function login({
+  phone,
+  password,
+}: Payload): Promise<User> {
+  try {
+    const { data: user } = await api.post<User>("/login", {
       phone,
       password
     });
-    const user: User = res.data;
     return user;
   } catch (err: any) {
-    if (err.response && err.response.data?.message) {
-      throw new Error(err.response.data.message);
-    }
-    throw new Error("Signup failed. Please try again.");
+    handleApiError(err);
   }
 }
 
-export async function login({
-  phone,
-  password,
-}: Payload): Promise<User> {
+async function refresh(token: { token: string }): Promise<User> {
   try {
-    const res = await api.post("/login", { phone, password });
-    const user: User = res.data;
+    const { data: user } = await api.post<User>("/refresh", {
+      token
+    });
     return user;
   } catch (err: any) {
-    if (err.response && err.response.data?.message) {
-      throw new Error(err.response.data.message);
-    }
-    throw new Error("Login failed. Please try again.");
+    handleApiError(err);
   }
 }
 
-export async function logout(): Promise<void> {
-  await api.post("/logout");
+async function logout(): Promise<void> {
+  await api.get("/logout");
 }
 
-export async function refresh(token: string): Promise<User> {
-  const res = await api.post("/refresh", { token });
-  const user: User = res.data;
-  return user;
+declare global {
+  interface Window {
+    Auth: {
+      login: typeof login;
+      register: typeof register;
+      logout: typeof logout;
+      refresh: typeof refresh;
+    };
+  }
 }
 
 if (typeof window !== "undefined") {
-  (window as any).Auth = {
+  window.Auth = {
     login,
     register,
     logout,
