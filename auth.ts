@@ -90,7 +90,7 @@ declare global {
 }
 
 if (typeof window !== "undefined") {
-  (window as any).Auth = {
+  window.Auth = {
     login,
     register,
     logout,
