@@ -97,5 +97,3 @@ if (typeof window !== "undefined") {
     refresh,
   };
 }
-
-export {};
