@@ -29,7 +29,7 @@ function handleApiError(err: any): never {
   throw new Error("Sth went wrong. Please try again.");
 }
 
-async function register({
+export async function register({
   phone,
   password,
 }: Payload): Promise<User> {
@@ -44,7 +44,7 @@ async function register({
   }
 }
 
-async function login({
+export async function login({
   phone,
   password,
 }: Payload): Promise<User> {
@@ -59,7 +59,7 @@ async function login({
   }
 }
 
-async function refresh(token: { token: string }): Promise<User> {
+export async function refresh(token: { token: string }): Promise<User> {
   try {
     const { data: user } = await api.post<User>("/refresh", {
       token
@@ -70,8 +70,12 @@ async function refresh(token: { token: string }): Promise<User> {
   }
 }
 
-async function logout(): Promise<void> {
-  await api.get("/logout");
+export async function logout(): Promise<void> {
+  try { 
+    await api.get("/logout");
+  } catch (err: any) {
+    handleApiError(err);
+  }
 }
 
 declare global {
