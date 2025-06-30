@@ -78,11 +78,9 @@ export async function logout(): Promise<void> {
   }
 }
 
-if (typeof window !== "undefined") {
-  (window as any).Auth = {
-    login,
-    register,
-    logout,
-    refresh,
-  };
-}
+export const Auth = {
+  login,
+  register,
+  logout,
+  refresh,
+};
